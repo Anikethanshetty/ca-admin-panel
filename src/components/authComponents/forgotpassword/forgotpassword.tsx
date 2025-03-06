@@ -31,11 +31,11 @@ export function ForgotPasswordForm({
                 <Input
                   id="email"
                   type="email"
-                  placeholder="m@example.com"
+                  placeholder="Email"
                   required
                 />
               </div>
-              <Button type="submit" className="w-full bg-primary">
+              <Button type="submit" className="w-full bg-primary font-semibold text-md">
                 Send Code
               </Button>
             </div>

@@ -1,15 +1,28 @@
 "use client";
 
+import { Navbar } from "@/components/navbarComponent/navbar";
 import { usePathname } from "next/navigation";
+
 
 export function LayoutWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
-  if (pathname === "/login" || "/register" || "/forgotpassword") {
-    return <>{children}</>; // Skip layout for login page
+  if (pathname === "/login") {
+    return <>{children}</>;
   }
 
-  return (
-          <main className="p-4">{children}</main>
-  );
+  if (pathname === "/register") {
+    return <>{children}</>;
+  }
+
+  if (pathname === "/forgotpassword") {
+    return <>{children}</>;
+  }
+    return (
+      <>
+      {console.log("control rechede here")}
+        <Navbar />
+      <main>{children}</main>
+      </>
+    )
 }
