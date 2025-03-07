@@ -1,16 +1,51 @@
 "use client"
 
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { useState } from "react"
+
+const titles =[
+    {
+        path:"/status",
+        w1:"Work",
+        w2:"Status"
+    },
+    {
+        path:"/history",
+        w1:"Work",
+        w2:"History"
+    },
+    {
+        path:"/viewuser",
+        w1:"Team",
+        w2:" Members"
+    }
+]
+
+const pathnames = [
+    "status",
+    "history",
+    "viewuser"
+]
+
+
 
 export function Navbar() {
     const [isNavOpen, setIsNavOpen] = useState(false)
     const [isDropdownOpen, setIsDropdownOpen] = useState(false)
     const [isDoubleDropdownOpen, setIsDoubleDropdownOpen] = useState(false)
+    const pathname = usePathname()
 
     return (
-        <nav className="bg-white border-gray-200 dark:bg-gray-900 dark:border-gray-700">
+        <nav className="bg-white border-gray-200 dark:bg-gray-900 dark:border-gray-700 md:mb-12">
             <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-                <span></span>
+            {titles.map(({ path, w1, w2 }) => (
+                    pathname === path && (
+                        <div key={path} className="text-2xl font-semibold text-gray-900 dark:text-white">
+                            {w1} <span className="text-primary">{w2}</span>
+                        </div>
+                    )
+                ))}
                 {/* Mobile Menu Button */}
                 <button 
                     onClick={() => setIsNavOpen(!isNavOpen)}
@@ -43,7 +78,7 @@ export function Navbar() {
                                 <div className="absolute left-0 mt-2 w-44 bg-white divide-y divide-gray-100 rounded-lg shadow-sm dark:bg-gray-700 dark:divide-gray-600">
                                     <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
                                         <li>
-                                            <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Work Status</a>
+                                            <Link href="status" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Work Status</Link>
                                         </li>
                                         <li className="relative">
                                             <button 
@@ -72,7 +107,7 @@ export function Navbar() {
                                         </li>
                                     </ul>
                                     <div className="py-1">
-                                        <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">View All Employees</a>
+                                        <Link href="/viewuser" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">View All Employees</Link>
                                     </div>
                                 </div>
                             )}

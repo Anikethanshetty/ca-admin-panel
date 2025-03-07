@@ -20,7 +20,6 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
   }
     return (
       <>
-      {console.log("control rechede here")}
         <Navbar />
       <main>{children}</main>
       </>
