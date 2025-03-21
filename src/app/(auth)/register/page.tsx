@@ -6,8 +6,8 @@ export default function RegisterPage() {
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="flex flex-col gap-4 p-6 md:p-10">
-      <div className="flex justify-center gap-2 md:self-end">
-          <Link href="/login" className={`hidden lg:flex items-center gap-3 text-white py-2.5 border font-medium text-sm border-gray-500 bg-primary rounded-xl ml-4 relative overflow-hidden group transition-colors duration-500  hover:text-black `}>
+      <div className="flex justify-center gap-2 self-end">
+          <Link href="/login" className={`flex items-center gap-3 text-white py-2.5 border font-medium text-sm border-gray-500 bg-primary rounded-xl ml-4 relative overflow-hidden group transition-colors duration-500  hover:text-black `}>
                     <span className="relative z-10 px-10 ">Login</span>
                     <span className="absolute inset-0 bg-white scale-x-0 origin-right transition-transform duration-1000 ease-out group-hover:scale-x-100"></span>
                 </Link>
