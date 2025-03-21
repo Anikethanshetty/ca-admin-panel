@@ -137,12 +137,14 @@ export function Navbar() {
                         </li>
                         <li className="relative">
                             <button 
+                         
                                 onClick={handleDropdownClick}
                                 className={`flex items-center justify-between w-full py-2 px-3 rounded-sm md:p-0 ${
-                                    isDropdownOpen || ['/status', '/history', '/viewuser'].some(path => isActive(path))
+                                    isDropdownOpen || isAddEmployeesOpen || isActive('/manageemployees') || ['/status', '/history', '/viewuser', '/createuser'].some(path => isActive(path))
                                     ? 'text-primary md:text-primary' 
                                     : 'text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:hover:text-primary dark:text-white md:dark:hover:text-primary'
                                 }`}
+                                
                             >
                                 Manage Employees
                                 <svg className="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
@@ -239,6 +241,7 @@ export function Navbar() {
                                                                 className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                                                                 onMouseDown={(e) => e.stopPropagation()}
                                                             >
+                                                                
                                                                 <CreateCategory />
                                                             </div>
                                                         </li>
@@ -246,7 +249,7 @@ export function Navbar() {
                                                             <Link 
                                                                 href="/createuser" 
                                                                 onClick={handleSubItemClick}
-                                                                className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                                                                className="block px-4 py-2 hover:bg-gray-100  dark:text-gray-200 dark:hover:text-white"
                                                             >
                                                                 Create Employees
                                                             </Link>

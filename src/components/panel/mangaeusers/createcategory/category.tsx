@@ -64,7 +64,7 @@ export function CreateCategory() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <div className="cursor-pointer text-blue-500">Create Category</div>
+        <div className="cursor-pointer">Create Category</div>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
