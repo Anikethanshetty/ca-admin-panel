@@ -1,5 +1,4 @@
-"use client"
-
+'use client'
 
 import {
   Table,
@@ -12,7 +11,6 @@ import {
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -21,7 +19,9 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { format } from "date-fns"
 import { MapPin } from "lucide-react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import useWorkHistory from "@/hooks/manageEmployees/getWorkHistory"
 
 interface WorkHistory {
   work_date: string
@@ -33,26 +33,77 @@ interface WorkHistory {
   timestamp: string
 }
 
-export function WorkHistoryTable({ workHistory }: { workHistory: WorkHistory[] }) {
+export function WorkHistoryTable({ userid }: { userid: string }) {
   const [page, setPage] = useState(1)
-  const itemsPerPage = 10
-  const totalPages = Math.ceil(workHistory.length / itemsPerPage)
+  const [currentData, setCurrentData] = useState<WorkHistory[]>([])
+  const { workHistory, loading, error, totalPages } = useWorkHistory(userid, page)
 
-  const paginatedData = workHistory.slice(
-    (page - 1) * itemsPerPage,
-    page * itemsPerPage
-  )
+  useEffect(() => {
+    if (workHistory) {
+      setCurrentData(workHistory)
+    }
+  }, [workHistory, page])
 
+  const handleNextPage = () => {
+    if (page < totalPages) {
+      setPage(prev => prev + 1)
+    }
+  }
 
+  const handlePreviousPage = () => {
+    if (page > 1) {
+      setPage(prev => prev - 1)
+    }
+  }
 
+  const handlePageClick = (pageNumber: number) => {
+    setPage(pageNumber)
+  }
 
+  if (loading) {
+    return (
+      <Card className="mt-20 mx-16">
+        <CardHeader>
+          <CardTitle>Work History</CardTitle>
+        </CardHeader>
+        <CardContent className="text-gray-500 text-center">Loading History...</CardContent>
+      </Card>
+    )
+  }
+
+  if (error || currentData.length === 0) {
+    return (
+      <div className="flex flex-col items-center mt-5">
+        <p className="text-muted-foreground">No Work History Found</p>
+      </div>
+    )
+  }
+
+  // Generate page numbers for pagination
+  const getPageNumbers = () => {
+    const pageNumbers = []
+    const maxVisiblePages = 5
+    let startPage = Math.max(1, page - Math.floor(maxVisiblePages / 2))
+    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1)
+
+    // Adjust start page if we're near the end
+    if (endPage - startPage + 1 < maxVisiblePages) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1)
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pageNumbers.push(i)
+    }
+
+    return pageNumbers
+  }
 
   return (
     <div className="space-y-4">
       <div className="rounded-md border">
         <Table>
           <TableHeader>
-            <TableRow >
+            <TableRow>
               <TableHead className="text-primary font-semibold">Date</TableHead>
               <TableHead className="text-primary font-semibold">Login Time</TableHead>
               <TableHead className="text-primary font-semibold">Logout Time</TableHead>
@@ -60,10 +111,12 @@ export function WorkHistoryTable({ workHistory }: { workHistory: WorkHistory[] }
             </TableRow>
           </TableHeader>
           <TableBody>
-            {paginatedData.map((work, index) => (
+            {currentData.map((work, index) => (
               <TableRow key={index}>
                 <TableCell className="font-medium">
-                  {format(new Date(work.work_date), "MMM dd, yyyy")}
+                  {work.work_date
+                    ? format(new Date(work.work_date), "MMM dd, yyyy")
+                    : "Invalid Date"}
                 </TableCell>
                 <TableCell>{work.login_time}</TableCell>
                 <TableCell>
@@ -81,10 +134,6 @@ export function WorkHistoryTable({ workHistory }: { workHistory: WorkHistory[] }
                     </span>
                   </div>
                 </TableCell>
-                {/* <TableCell>{getStatusBadge(work.uploaded_work)}</TableCell> */}
-                {/* <TableCell className="text-muted-foreground">
-                  {format(new Date(work.timestamp), "MMM dd, yyyy HH:mm")}
-                </TableCell> */}
               </TableRow>
             ))}
           </TableBody>
@@ -95,23 +144,56 @@ export function WorkHistoryTable({ workHistory }: { workHistory: WorkHistory[] }
         <PaginationContent>
           <PaginationItem>
             <PaginationPrevious 
-              onClick={() => setPage(p => Math.max(1, p - 1))}
+              onClick={handlePreviousPage}
               className={page <= 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
             />
           </PaginationItem>
-          {[...Array(totalPages)].map((_, i) => (
-            <PaginationItem key={i + 1}>
+          
+          {/* First page if not in view */}
+          {getPageNumbers()[0] > 1 && (
+            <>
+              <PaginationItem>
+                <PaginationLink onClick={() => handlePageClick(1)}>1</PaginationLink>
+              </PaginationItem>
+              {getPageNumbers()[0] > 2 && (
+                <PaginationItem>
+                  <span className="px-4">...</span>
+                </PaginationItem>
+              )}
+            </>
+          )}
+
+          {/* Visible page numbers */}
+          {getPageNumbers().map((pageNum) => (
+            <PaginationItem key={pageNum}>
               <PaginationLink
-                onClick={() => setPage(i + 1)}
-                isActive={page === i + 1}
+                onClick={() => handlePageClick(pageNum)}
+                className={page === pageNum ? "bg-primary text-primary-foreground" : ""}
               >
-                {i + 1}
+                {pageNum}
               </PaginationLink>
             </PaginationItem>
           ))}
+
+          {/* Last page if not in view */}
+          {getPageNumbers()[getPageNumbers().length - 1] < totalPages && (
+            <>
+              {getPageNumbers()[getPageNumbers().length - 1] < totalPages - 1 && (
+                <PaginationItem>
+                  <span className="px-4">...</span>
+                </PaginationItem>
+              )}
+              <PaginationItem>
+                <PaginationLink onClick={() => handlePageClick(totalPages)}>
+                  {totalPages}
+                </PaginationLink>
+              </PaginationItem>
+            </>
+          )}
+
           <PaginationItem>
             <PaginationNext
-              onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+              onClick={handleNextPage}
               className={page >= totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
             />
           </PaginationItem>
