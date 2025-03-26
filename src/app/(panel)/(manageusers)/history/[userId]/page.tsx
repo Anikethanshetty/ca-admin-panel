@@ -5,42 +5,51 @@ import { useParams } from 'next/navigation'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { WorkHistoryTable } from '@/components/panel/mangaeusers/history/userHistoryTable'
-
-export default function UserWorkHistory() {
+import { useEffect } from 'react'
+import { usePathname } from 'next/navigation'
+import Link from "next/link"
+export default function UserWorkHistory({ setNavbarTitle }: { setNavbarTitle: (title: string) => void }) {
   const { userId } = useParams()
   const { workHistory, loading, error } = useWorkHistory(String(userId))
+  const pathname = usePathname()
+
+  useEffect(() => {
+    if (pathname === '/history') {
+      setNavbarTitle('Work History')
+    }
+  }, [pathname, setNavbarTitle])
 
   if (loading) {
     return (
-      <Card className='mt-20 mx-16'>
+      <Card className='mt-20 mx-16'
+           
+      >
+        
         <CardHeader>
           <CardTitle>Work History</CardTitle>
         </CardHeader>
-        {/* <CardContent>
-          <div className="flex items-center justify-center h-64">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-          </div>
-        </CardContent> */}<CardContent className='text-gray-500 text-center'>Loading History...</CardContent>
+        <CardContent className='text-black text-center'>Loading History...</CardContent>
       </Card>
     )
   }
-console.log(error)
+
   if (error) {
     return (
-   <div className='flex flex-col items-center'>
-    <p className='text-muted-foreground'>No Work History Found</p>
-   </div>
+      <div className='flex flex-col items-center'>
+        <p className='text-muted-foreground'>No Work History Found</p>
+      </div>
     )
   }
 
   return (
-    <Card className='mt-20 mx-16 shadow-xl'>
+    <Link className='mt-20 mx-16 shadow-xl'
+    href="/history">
       <CardHeader>
-        <CardTitle className='text-muted-foreground font-medium'>Work History</CardTitle>
+        <CardTitle className='font-2xl font-bold text-black'>Work History</CardTitle>
       </CardHeader>
       <CardContent>
         <WorkHistoryTable workHistory={workHistory} />
       </CardContent>
-    </Card>
+    </Link>
   )
 }
