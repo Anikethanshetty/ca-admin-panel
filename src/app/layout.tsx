@@ -3,6 +3,7 @@ import "./globals.css";
 import { LayoutWrapper } from "./layoutConfig/LayoutWrapper";
 import {metadata} from "./layoutConfig/metadata"
 import { Toaster } from "sonner";
+import StoreProvider from "./StoreProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,8 +33,10 @@ export default function RootLayout({
       <body
         className={`${poppins.className} antialiased`}
       >
-        <LayoutWrapper >{children}</LayoutWrapper>
-        <Toaster />
+       <StoreProvider>
+       <LayoutWrapper >{children}</LayoutWrapper>
+       <Toaster />
+        </StoreProvider> 
       </body>
     </html>
   );

@@ -16,6 +16,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination"
+
 import { Badge } from "@/components/ui/badge"
 import { format } from "date-fns"
 import { MapPin } from "lucide-react"
@@ -86,7 +87,6 @@ export function WorkHistoryTable({ userid }: { userid: string }) {
     let startPage = Math.max(1, page - Math.floor(maxVisiblePages / 2))
     let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1)
 
-    // Adjust start page if we're near the end
     if (endPage - startPage + 1 < maxVisiblePages) {
       startPage = Math.max(1, endPage - maxVisiblePages + 1)
     }

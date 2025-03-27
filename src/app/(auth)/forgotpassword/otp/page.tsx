@@ -1,8 +1,12 @@
+"use client"
+
 import { ForgotPasswordOtpForm } from "@/components/authComponents/forgotpassword/forgotpasswordotp";
 import { Card, CardTitle } from "@/components/ui/card";
+import { useSearchParams } from "next/navigation";
 
 
 export default function ForgotPasswordOtp() {
+
   return (
     <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
       <div className="w-[50%] max-w-sm">

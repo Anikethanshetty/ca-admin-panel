@@ -38,9 +38,7 @@ export function NewPasswordForm({
 
     toast.success("Password reset successfully!")
     
-    setTimeout(() => {
-      router.push("/login")
-    }, 1000) 
+    
   }
 
   return (

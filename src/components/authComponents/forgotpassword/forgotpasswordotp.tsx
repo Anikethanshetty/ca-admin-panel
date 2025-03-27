@@ -18,6 +18,9 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp"
+import { handleOtpVerify } from "@/lib/authApi/forgotpassword/otpVerify"
+import { useAppSelector } from "@/redux/hooks"
+import { useRouter } from "next/navigation"
 
 const FormSchema = z.object({
   pin: z.string().length(4, {
@@ -25,15 +28,19 @@ const FormSchema = z.object({
   }),
 })
 
+
 export function ForgotPasswordOtpForm() {
+  const router = useRouter()
+  const email = useAppSelector((state) => state.email.email)
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       pin: "",
     },
   })
-
-  function onSubmit(data: z.infer<typeof FormSchema>) {
+  
+ async function onSubmit(data: z.infer<typeof FormSchema>) {
     toast("You submitted the following values:", {
       description: (
         <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
@@ -41,7 +48,19 @@ export function ForgotPasswordOtpForm() {
         </pre>
       ),
     })
-  
+    if(!email){
+      toast("Please email not found")
+      return
+    }
+    const reponse = await handleOtpVerify(email,data.pin)
+    console.log(reponse)
+    if(reponse.status === "success"){
+      toast("OTP verified")
+      router.push("/forgotpassword/newpassword")
+      return
+    }
+    toast("OTP verification failed")
+
   }
 
   return (
