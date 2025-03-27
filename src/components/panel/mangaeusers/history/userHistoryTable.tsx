@@ -16,10 +16,8 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination"
-
-import { Badge } from "@/components/ui/badge"
 import { format } from "date-fns"
-import { MapPin } from "lucide-react"
+import { Badge, MapPin } from "lucide-react"
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import useWorkHistory from "@/hooks/manageEmployees/getWorkHistory"
@@ -87,6 +85,7 @@ export function WorkHistoryTable({ userid }: { userid: string }) {
     let startPage = Math.max(1, page - Math.floor(maxVisiblePages / 2))
     let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1)
 
+    // Adjust start page if we're near the end
     if (endPage - startPage + 1 < maxVisiblePages) {
       startPage = Math.max(1, endPage - maxVisiblePages + 1)
     }
@@ -121,7 +120,7 @@ export function WorkHistoryTable({ userid }: { userid: string }) {
                 <TableCell>{work.login_time}</TableCell>
                 <TableCell>
                   {work.logout_time === "pending" ? (
-                    <Badge variant="secondary">Active</Badge>
+                    <Badge>Active</Badge>
                   ) : (
                     work.logout_time
                   )}
