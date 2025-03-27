@@ -1,4 +1,4 @@
-"use client";
+git pull --rebase origin main"use client";
 
 import { Navbar } from "@/components/navbarComponent/navbar";
 import { usePathname } from "next/navigation";
