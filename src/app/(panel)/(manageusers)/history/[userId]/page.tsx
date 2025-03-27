@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { WorkHistoryTable } from '@/components/panel/mangaeusers/history/userHistoryTable'
+
 import { useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 import Link from "next/link"
@@ -41,6 +42,12 @@ export default function UserWorkHistory({ setNavbarTitle }: { setNavbarTitle: (t
     )
   }
 
+import { useId, useState } from 'react'
+
+export default function UserWorkHistory() {
+  const { userId } = useParams()
+ const userid = String(userId)
+
   return (
     <Link className='mt-20 mx-16 shadow-xl'
     href="/history">
@@ -48,7 +55,7 @@ export default function UserWorkHistory({ setNavbarTitle }: { setNavbarTitle: (t
         <CardTitle className='font-2xl font-bold text-black'>Work History</CardTitle>
       </CardHeader>
       <CardContent>
-        <WorkHistoryTable workHistory={workHistory} />
+      <WorkHistoryTable userid={userid} />
       </CardContent>
     </Link>
   )
