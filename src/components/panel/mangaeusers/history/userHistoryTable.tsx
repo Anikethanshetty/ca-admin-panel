@@ -1,4 +1,6 @@
-'use client'
+
+"use client";
+
 
 import {
   Table,
@@ -7,7 +9,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 import {
   Pagination,
   PaginationContent,
@@ -15,6 +17,7 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
+
 } from "@/components/ui/pagination"
 import { format } from "date-fns"
 import { Badge, MapPin } from "lucide-react"
@@ -23,14 +26,17 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import useWorkHistory from "@/hooks/manageEmployees/getWorkHistory"
 
 interface WorkHistory {
-  work_date: string
-  login_time: string
-  logout_time: string
-  latitude: string
-  longitude: string
-  uploaded_work: string
-  timestamp: string
+  work_date: string;
+  login_time: string;
+  logout_time: string;
+  latitude: string;
+  longitude: string;
+  uploaded_work: string;
+  timestamp: string;
 }
+
+
+
 
 export function WorkHistoryTable({ userid }: { userid: string }) {
   const [page, setPage] = useState(1)
@@ -110,6 +116,7 @@ export function WorkHistoryTable({ userid }: { userid: string }) {
             </TableRow>
           </TableHeader>
           <TableBody>
+
             {currentData.map((work, index) => (
               <TableRow key={index}>
                 <TableCell className="font-medium">
@@ -133,11 +140,13 @@ export function WorkHistoryTable({ userid }: { userid: string }) {
                     </span>
                   </div>
                 </TableCell>
+
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
       </div>
+
 
       <Pagination className="justify-end">
         <PaginationContent>
@@ -199,5 +208,5 @@ export function WorkHistoryTable({ userid }: { userid: string }) {
         </PaginationContent>
       </Pagination>
     </div>
-  )
+  );
 }
