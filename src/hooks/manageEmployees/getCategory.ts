@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { jwtDecode } from "jwt-decode"
+import Cookies from "js-cookie"
 
 interface DecodedToken {
     email: string
@@ -26,7 +27,7 @@ export function useEmployeeCategories() {
     const [error, setError] = useState<string | null>(null)
 
     useEffect(() => {
-        const token = localStorage.getItem("authToken")
+        const token = Cookies.get("token")
         if (!token) {
             setError("No authentication token found. Please log in.")
             setLoading(false)
@@ -45,7 +46,7 @@ export function useEmployeeCategories() {
 
         const fetchCategories = async () => {
             try {
-                const response = await fetch(`http://34.133.203.207:8080/admin/get/employee_categories/${decodedToken.id}`,{
+                const response = await fetch(`https://ca.http.vithsutra.com/admin/get/employee_categories/${decodedToken.id}`,{
                     headers: {
                         Authorization: `Bearer ${token}`
                     }

@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label"
 import { useState } from "react"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
+import { handleUpdatePassword } from "@/lib/authApi/forgotpassword/updatePassword"
 
 export function NewPasswordForm({
   className,
@@ -23,8 +24,9 @@ export function NewPasswordForm({
   const [confirmPassword, setConfirmPassword] = useState<string>("")
   const router = useRouter()
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    console.log(password, confirmPassword)
 
     if (!password || !confirmPassword) {
       toast.error("Both fields are required!")
@@ -36,8 +38,13 @@ export function NewPasswordForm({
       return
     }
 
-    toast.success("Password reset successfully!")
-    
+    const response = await handleUpdatePassword(password)
+    if(response.status === "successs"){
+      toast.success("Password updated successfully!")
+      router.push("/login")
+      return
+    }
+    toast.error("Password update failed")
     
   }
 
@@ -57,6 +64,7 @@ export function NewPasswordForm({
                   id="password"
                   type="password"
                   placeholder="Password"
+                  name="password"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -68,6 +76,7 @@ export function NewPasswordForm({
                   id="confirmPassword"
                   type="password"
                   placeholder="Confirm Password"
+                  name="confirmPassword"
                   required
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}

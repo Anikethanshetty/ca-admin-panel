@@ -1,13 +1,15 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-   redirects: async () => [
+  redirects: async () => [
     {
-      source: "/",
-      destination: "/login", 
-      permanent: true,
+      source: '/',
+      destination: '/login',
+      permanent: false, // Use false if this might change based on auth
     },
   ],
-};
+  
+  matcher: ['/((?!_next|favicon.ico|api/public).*)'],
+}
 
-export default nextConfig;
+export default nextConfig

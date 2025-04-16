@@ -21,6 +21,7 @@ import {
 import { handleOtpVerify } from "@/lib/authApi/forgotpassword/otpVerify"
 import { useAppSelector } from "@/redux/hooks"
 import { useRouter } from "next/navigation"
+import { storeToken } from "@/lib/cookie/storeCookie"
 
 const FormSchema = z.object({
   pin: z.string().length(4, {
@@ -53,7 +54,8 @@ export function ForgotPasswordOtpForm() {
       return
     }
     const reponse = await handleOtpVerify(email,data.pin)
-    console.log(reponse)
+    const Otptoken = reponse.data.token
+        storeToken(Otptoken)
     if(reponse.status === "success"){
       toast("OTP verified")
       router.push("/forgotpassword/newpassword")

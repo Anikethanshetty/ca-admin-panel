@@ -2,7 +2,7 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { jwtDecode } from "jwt-decode"
-
+import Cookies from "js-cookie"
 
 interface DecodedToken {
     email: string
@@ -17,44 +17,57 @@ export function useUsers() {
     const [error, setError] = useState<string | null>(null)
 
     useEffect(() => {
+        let timeoutId: NodeJS.Timeout
+        const controller = new AbortController() 
+
         async function fetchUsers() {
             try {
-                const token = localStorage.getItem("authToken")
-
+                const token = Cookies.get("token")
                 if (!token) {
                     setError("No authentication token found. Please log in.")
+                    return
                 }
 
-                //@ts-ignore
                 const decodedToken: DecodedToken = jwtDecode<DecodedToken>(token)
-
                 if (!decodedToken.id) {
                     throw new Error("Invalid token structure. Missing user ID.")
                 }
 
-               
+                // Start timeout
+                timeoutId = setTimeout(() => {
+                    setError("No users found (request timeout)")
+                    controller.abort() 
+                    setLoading(false)
+                }, 10000) // 10 seconds
 
-                const apiUrl = `http://34.133.203.207:8080/admin/get/users/48d223d7-c502-412a-a9a3-69b83709adc9`
+                const apiUrl = `https://ca.http.vithsutra.com/admin/get/users/${decodedToken.id}`
                 
                 const response = await axios.get(apiUrl, {
                     headers: {
                         Authorization: `Bearer ${token}`
-                    }
+                    },
+                    signal: controller.signal // for aborting if needed
                 })
-                console.log(response)
+
+                clearTimeout(timeoutId) // clear timeout if response returns
+
                 if (response.data.status === "success") {
                     setUsers(response.data.data)
                 } else {
                     throw new Error(response.data.message || "Failed to fetch users")
                 }
             } catch (err: any) {
-                setError(err.message)
+                if (err.name !== "CanceledError") {
+                    setError(err.message || "An unexpected error occurred")
+                }
             } finally {
                 setLoading(false)
             }
         }
 
         fetchUsers()
+
+        return () => clearTimeout(timeoutId)
     }, [])
 
     return { users, loading, error }

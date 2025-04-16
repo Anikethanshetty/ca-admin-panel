@@ -4,13 +4,16 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { CreateCategory } from "../panel/mangaeusers/createcategory/category";
+import ProfileAvatar from "./Profile/profile";
+import { ProfileDialog } from "./Profile/profileDialog";
 
 const titles = [
-    { path: "/status", w1: "Work", w2: "Status" },
+    // { path: "/status", w1: "Work", w2: "Status" },
     { path: "/viewuser", w1: "Team", w2: "Members" },
     { path: "/home", w1: "", w2: "" },
     { path: "/createuser", w1: "Create", w2: "Employee" },
-    { path: "/history", w1: "Create", w2: "Manoj" }
+    { path: "/history", w1: "Create", w2: "Manoj" },
+    { path: "/pendingleaves", w1: "Pending", w2: "Leaves" }
 ];
 
 export function Navbar() {
@@ -46,8 +49,8 @@ export function Navbar() {
     const isActive = (path: string) => pathname === path;
 
     return (
-        <nav ref={navRef} className="bg-white border-b dark:bg-gray-900 dark:border-gray-700 relative z-50">
-            <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4">
+        <nav ref={navRef} className="bg-white  dark:bg-gray-900 dark:border-gray-700 relative z-50">
+            <div className="max-w-screen-xl flex items-center justify-between mx-auto">
                 {titles.map(({ path, w1, w2 }) => (
                     isActive(path) && (
                         <div key={path} className="text-2xl font-semibold text-gray-900 dark:text-white">
@@ -73,7 +76,6 @@ export function Navbar() {
                             {isDropdownOpen && (
                                 <div className="absolute left-0 mt-2 w-44 bg-white rounded-lg shadow-lg dark:bg-gray-700">
                                     <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
-                                        <li><Link href="/status" onClick={handleNavItemClick} className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600">Work Status</Link></li>
                                         <li className="relative">
                                             <button onClick={handleAddEmployeesToggle} className="flex items-center justify-between w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600">Add Employees</button>
                                             {isAddEmployeesOpen && (
@@ -85,15 +87,21 @@ export function Navbar() {
                                                 </div>
                                             )}
                                         </li>
+                                            <li><Link href="/pendingleaves" onClick={handleNavItemClick} className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600">Check Leaves</Link></li>
                                     </ul>
                                     <div className="py-1">
-                                        <Link href="/viewuser" onClick={handleNavItemClick} className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600">View All Employees</Link>
+                                        <Link href="/viewuser" onClick={handleNavItemClick} className="block px-4 py-2 text-sm hover:bg-gray-100 hover:rounded-md dark:hover:bg-gray-600">View All Employees</Link>
                                     </div>
                                 </div>
                             )}
                         </li>
                         <li>
                             <Link href="/message" onClick={handleNavItemClick} className={`block py-2 px-3 rounded-sm ${isActive('/message') ? 'text-primary' : 'text-gray-900 hover:text-primary dark:text-white'}`}>Message</Link>
+                        </li>
+                        <li>
+                           <div >
+                                <ProfileDialog />
+                           </div>
                         </li>
                     </ul>
                 </div>

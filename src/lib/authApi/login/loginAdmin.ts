@@ -1,17 +1,16 @@
+import { storeToken } from "@/lib/cookie/storeCookie";
 import axios from "axios";
 
 export async function handleLoginForm(email: FormDataEntryValue, password: FormDataEntryValue) {
   try {
-    const response = await axios.post("http://34.133.203.207:8080/auth/login/admin", {
+    const response = await axios.post("https://ca.http.vithsutra.com/auth/login/admin", {
       email,
       password
     })
-    
-    console.log("Login Response:", response.data) 
     return response.data 
 
   } catch (error) {
-    console.error("There was an error:", error)
-    throw error 
+    console.log("There was an error:", error)
+    return error 
   }
 }

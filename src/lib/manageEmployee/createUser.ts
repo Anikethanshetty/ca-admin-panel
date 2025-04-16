@@ -17,7 +17,7 @@ export async function handelCreateUser(formData: Record<string, any>, token: str
         }
        
 
-        const response = await fetch("http://34.133.203.207:8080/admin/create/user", {
+        const response = await fetch("https://ca.http.vithsutra.com/admin/create/user", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

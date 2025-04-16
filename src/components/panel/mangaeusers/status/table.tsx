@@ -65,7 +65,6 @@ const headers = [
   "user",
   "user",
   "user",
-  
 ]
 
 export function StatusTable() {

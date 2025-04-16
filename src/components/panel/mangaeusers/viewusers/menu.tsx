@@ -19,13 +19,14 @@ import { Ellipsis } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
+import Cookies from "js-cookie"
 
 export function EmplMenu({ emplId }: { emplId: string}) {
   const [token, setToken] = useState<string | null>(null)
 
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("authToken")
+    const storedToken = Cookies.get("token")
     if (!storedToken) {
       alert("You are not authenticated")
       return
@@ -48,9 +49,6 @@ export function EmplMenu({ emplId }: { emplId: string}) {
         alert("User not deleted: " + error.message)
       })
   }
-
-
-
 
   return (
     <DropdownMenu>

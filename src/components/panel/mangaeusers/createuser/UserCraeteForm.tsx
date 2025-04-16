@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
+import Cookies from "js-cookie"
 import {
   Card,
   CardContent,
@@ -13,6 +14,7 @@ import { Label } from "@/components/ui/label"
 import { useState, useEffect } from "react"
 import { handelCreateUser } from "@/lib/manageEmployee/createUser"
 import { CategorySelect } from "./selectCategory"
+import { toast } from "sonner"
 
 export function EmplCreateForm({
   className,
@@ -33,7 +35,7 @@ export function EmplCreateForm({
   const [token, setToken] = useState<string | null>(null)
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("authToken")
+    const storedToken = Cookies.get("token")
     if (!storedToken) {
       setError("No authentication token found. Please log in.")
       return
@@ -58,7 +60,7 @@ export function EmplCreateForm({
     e.preventDefault()
 
     if (!token) {
-      alert("Authentication error: Please log in first.")
+      toast("Authentication error: Please log in first.")
       return
     }
 
@@ -66,10 +68,10 @@ export function EmplCreateForm({
 
     try {
       const response = await handelCreateUser(formData, token)
-      console.log(response)
+
 
       if (response && response.status) {
-        alert("User registered successfully!")
+        toast("User registered successfully!")
         setFormData({
           name: "",
           dob: "",
@@ -81,7 +83,7 @@ export function EmplCreateForm({
         })
         setError("")
       } else {
-        alert("Failed to register user.")
+        toast("Failed to register user.")
       }
       
     } catch (error) {

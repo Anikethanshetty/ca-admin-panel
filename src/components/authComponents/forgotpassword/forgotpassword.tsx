@@ -31,6 +31,7 @@ export function ForgotPasswordForm({
       const formData = new FormData(e.currentTarget)
       const email = formData.get("email") as string
       const response = await handleForgotPassword(email)
+    
        if (response.status === "success") {
           dispatch(setEmail(email))
           router.push(`/forgotpassword/otp`)

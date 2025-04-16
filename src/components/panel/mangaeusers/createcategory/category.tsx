@@ -13,6 +13,9 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useRouter } from "next/navigation"
 import { handelCreateCategory } from "@/lib/manageEmployee/createCategory"
+import { toast } from "sonner"
+import Cookies from 'js-cookie'
+
 
 export function CreateCategory() {
   const router = useRouter()
@@ -20,9 +23,10 @@ export function CreateCategory() {
   const [description, setDescription] = useState("")
   const [errors, setErrors] = useState({ name: "", description: "" })
   const [token, setToken] = useState<string | null>(null)
+  const [disabled,setDisabled] = useState(false)
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("authToken")
+    const storedToken = Cookies.get("token")
 
     if (!storedToken) {
       alert("Please login. You are not authenticated.")
@@ -47,13 +51,17 @@ export function CreateCategory() {
 
     if (token) {
         try {
+          setDisabled(true)
             const response = await handelCreateCategory(categoryData, token)
-            alert(response.message) // Show success message from API
+            toast(response.message) 
             setName("")
             setDescription("")
             setErrors({ name: "", description: "" })
         } catch (error:any) {
-            alert(error.message) 
+            toast(error.message)
+        }
+        finally{
+          setDisabled(false)
         }
     } else {
         alert("Authentication token not found. Please log in again.")
@@ -104,7 +112,7 @@ export function CreateCategory() {
           </div>
         </div>
         <DialogFooter>
-          <Button onClick={handleSubmit}>Save changes</Button>
+          <Button onClick={handleSubmit} disabled={disabled}>Save changes</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

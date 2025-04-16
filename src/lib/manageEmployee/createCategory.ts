@@ -10,14 +10,15 @@ interface DecodedToken {
 export async function handelCreateCategory(category: { name: string; description: string }, token: string) {
     try {
         const decoded: DecodedToken = jwtDecode(token)
-
+        
+        console.log(decoded.id)
         const payload = {
             category_name: category.name,
             admin_id: decoded.id,
             category_description: category.description
         }
-
-        const response = await fetch("http://34.133.203.207:8080/admin/create/employee_category", {
+        console.log(JSON.stringify(payload))
+        const response = await fetch("https://ca.http.vithsutra.com/admin/create/employee_category", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

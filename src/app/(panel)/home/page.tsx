@@ -11,7 +11,7 @@ export default function Home(){
                 <section>
                         <div className="grid gap-y-10">
                             <h1 className="text-5xl font-extrabold">Leading the Future of <span className="text-primary">Finance</span></h1>
-                            <p className="text-lg font-medium grid gap-y-1">A Central Hub for Lead CAs <div>to Oversee and Streamline Their CA Workforce.</div> </p>
+                            <p className="text-lg font-medium grid gap-y-1">A Central Hub for Lead CAs <span>to Oversee and Streamline Their CA Workforce.</span> </p>
                         </div>
                 </section>
                 <footer>

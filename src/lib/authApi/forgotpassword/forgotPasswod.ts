@@ -6,7 +6,6 @@ export async function handleForgotPassword(email: FormDataEntryValue) {
       email,
     })
     
-    console.log("Login Response:", response.data) 
     return response.data 
 
   } catch (error) {
