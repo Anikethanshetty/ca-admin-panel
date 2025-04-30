@@ -15,6 +15,7 @@ import { toast } from "sonner"
 export function PendingLeavesTable({ adminId }: { adminId: string }) {
     const [searchTerm, setSearchTerm] = useState("")
     const [page, setPage] = useState(1)
+    const [disabled,setDisabled] = useState(false)
     const { pendingLeaves, loading, error, removeLeave } = usePendingLeaves(adminId, page)
     const authToken = Cookies.get("token")
 
@@ -30,6 +31,7 @@ export function PendingLeavesTable({ adminId }: { adminId: string }) {
     )
 
     function handleAccept(leaveId: string) {
+      setDisabled(true)
       if (!authToken) {
         console.error("Authorization token is missing")
         return
@@ -38,14 +40,17 @@ export function PendingLeavesTable({ adminId }: { adminId: string }) {
       handelGrantLeaves(leaveId, authToken)
         .then(() => {
           removeLeave(leaveId) 
-          console.log("Leave granted successfully and removed from UI")
+          setDisabled(false)
+
         })
         .catch(error => {
+         setDisabled(false)
           console.error("Failed to grant leave:", error.message)
         })
     }
 
     function handleDecline(leaveId: string,userId:string) {
+      setDisabled(true)
       if (!authToken) {
         console.error("Authorization token is missing")
         return
@@ -55,11 +60,12 @@ export function PendingLeavesTable({ adminId }: { adminId: string }) {
         .then(() => {
           removeLeave(leaveId)
           toast("Leave declined")
-          console.log("Leave declined successfully and removed from UI")
+      setDisabled(false)
+        
         })
         .catch(error => {
           toast("Leave decline failed: " + error.message)
-          console.error("Failed to decline leave:", error.message)
+          setDisabled(false)
         })
     }
 
@@ -103,8 +109,8 @@ export function PendingLeavesTable({ adminId }: { adminId: string }) {
                   <TableCell>{leave.leave_to}</TableCell>
                   <TableCell>{leave.leave_reason}</TableCell>
                   <TableCell>
-                    <Button variant="default" className="mr-2" onClick={() => handleAccept(leave.leave_id)}>Accept</Button>
-                    <Button variant="destructive" onClick={() => handleDecline(leave.leave_id,leave.user_id)}>Decline</Button>
+                    <Button variant="default" className="mr-2" onClick={() => handleAccept(leave.leave_id)} disabled={disabled}>Accept</Button>
+                    <Button variant="destructive" onClick={() => handleDecline(leave.leave_id,leave.user_id)} disabled={disabled}>Decline</Button>
                   </TableCell>
                 </TableRow>
               ))}

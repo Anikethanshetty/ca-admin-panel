@@ -4,8 +4,10 @@ import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/ca
 import { useUsers } from "@/hooks/manageEmployees/getEmployess"
 import { EmplMenu } from "./menu"
 
+
 export default function UserCards() {
     const { users, loading, error } = useUsers()
+    
 
     if (loading) return <p className="text-center text-gray-500">Loading users...</p>
     if (!users || users.length === 0) {
@@ -34,7 +36,7 @@ export default function UserCards() {
                         <CardDescription className="text-sm text-gray-700">{email}</CardDescription>
                         <p className="text-xs text-gray-400 mt-1">{position}</p>
                         <div className="flex justify-end">
-                            <EmplMenu emplId={user_id}  />
+                            <EmplMenu emplId={user_id} />
                         </div>
                     </CardHeader>
                 </Card>

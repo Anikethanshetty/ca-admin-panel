@@ -25,9 +25,9 @@ export async function handelCreateUser(formData: Record<string, any>, token: str
             },
             body: JSON.stringify(payload)
         })
-
+        console.log(response)
         if (!response.ok) {
-            const errorData = await response.json()
+            await response.json()
             throw new Error(`Request failed with status ${response.status}`)
         }
 

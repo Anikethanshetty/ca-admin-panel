@@ -14,7 +14,7 @@ export async function handleUpdatePassword(password: FormDataEntryValue) {
             message: "No authentication token found"
         }
     }
-    //@ts-ignore
+    //@ts-expect-error
     const adminId = jwtDecode(token).id
     console.log(adminId)
     try {

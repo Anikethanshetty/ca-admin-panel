@@ -9,7 +9,9 @@ import { handleLoginForm } from "@/lib/authApi/login/loginAdmin"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
-import { storeToken } from "@/lib/cookie/storeCookie"
+import { storeFbId, storeToken } from "@/lib/cookie/storeCookie"
+import { signInWithEmailAndPassword } from "firebase/auth"
+import { auth } from "@/utils/firestore"
 
 export function LoginForm({
   className,
@@ -30,9 +32,17 @@ export function LoginForm({
       const response = await handleLoginForm(email, password)
 
       if (response.status === "success") {
-        const token = response.data.token
-        storeToken(token)
-        router.push("/home")
+        try {
+          const fbResponse = await signInWithEmailAndPassword(auth,email, password)
+          const token = response.data.token
+          storeToken(token)
+          //@ts-expect-error
+          storeFbId(fbResponse._tokenResponse.localId)
+          router.push("/home")
+        } catch (error) {
+          toast("Login Failed")
+        }
+       
       } else {
         toast("Login Failed: " + response.message)
       }

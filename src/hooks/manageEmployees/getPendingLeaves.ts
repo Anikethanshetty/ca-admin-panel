@@ -26,13 +26,11 @@ interface ApiResponse {
   error?: string
 }
 const usePendingLeaves = (adminId: string, page: number) => {
-  console.log(adminId)
     const [pendingLeaves, setPendingLeaves] = useState<ApiResponse["data"] | null>(null)
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
     const { authToken, tokenLoading } = useAuthToken()
 
-    const decoded = authToken ? jwtDecode(authToken) : null
 
 
     useEffect(() => {

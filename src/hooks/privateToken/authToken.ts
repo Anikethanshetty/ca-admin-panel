@@ -39,6 +39,6 @@ export default function useAuthToken() {
 
   }, [])
 
-
+  
   return { authToken, decodedToken, tokenLoading }
 }

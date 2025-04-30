@@ -2,7 +2,6 @@
 
 import { ForgotPasswordOtpForm } from "@/components/authComponents/forgotpassword/forgotpasswordotp";
 import { Card, CardTitle } from "@/components/ui/card";
-import { useSearchParams } from "next/navigation";
 
 
 export default function ForgotPasswordOtp() {

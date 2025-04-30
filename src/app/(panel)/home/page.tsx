@@ -1,10 +1,11 @@
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 import Link from "next/link";
 
 export default function Home(){
     return (
         <div className="w-full h-[800px] mt-6 px-20 flex mb-20">
-            <div className="md:w-[50%] w-full flex flex-col justify-between h-full rounded-tl-2xl rounded-bl-2xl py-10 pl-10 border-gray-200 shadow-2xl">
+            <div className="md:w-[50%] w-full flex flex-col justify-between h-full rounded-2xl rounded-tl-2xl rounded-bl-2xl py-10 pl-10 border-gray-200 shadow-2xl">
                 <header>
                     <h1 className="text-lg font-medium text-muted-foreground">Charted Accountant</h1>
                 </header>
@@ -20,8 +21,8 @@ export default function Home(){
                 </Button>
                 </footer>
             </div>
-             <div className="w-[50%] hidden md:block bg-blue-500  h-full rounded-tr-2xl rounded-br-2xl shadow-2xl">
-                
+             <div className="w-[50%] hidden md:flex   items-center justify-center h-full  ">
+                <Image src={"/ca.jpg"} alt="" width={500} height={200}></Image>
             </div>
         </div>
     )

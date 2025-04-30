@@ -20,8 +20,6 @@ import {  updateAdminProfilePhoto } from "@/lib/manageEmployee/profile/profileUp
 import { toast } from "sonner"
 import { updateAdminProfile } from "@/lib/manageEmployee/profile/profilePhotoUpdate"
 import { handelDelete } from "@/lib/manageEmployee/profile/profileDelete"
-import { set } from "date-fns"
-
 interface AdminProfile {
   name: string
   dob: string
@@ -38,6 +36,8 @@ export function ProfileDialog() {
   const [photoFile, setPhotoFile] = useState<File | null>(null)
   const [photoPreview, setPhotoPreview] = useState<string | null>(null)
   const [disabled,setDisabled] = useState(false)
+
+  
 
   const [formData, setFormData] = useState({
     name: "",
@@ -56,7 +56,7 @@ export function ProfileDialog() {
         const decoded: any = jwtDecode(authToken)
         setAdminId(decoded?.id)
       } catch (e) {
-        console.error("Invalid token")
+        console.error("Invalid token",e)
       }
     }
   }, [authToken])
@@ -107,6 +107,7 @@ export function ProfileDialog() {
         setPhotoPreview(null)
       }
     } catch (error) {
+      console.error(error)
       toast.error("Error deleting profile photo")
     }
     finally{
@@ -133,11 +134,10 @@ export function ProfileDialog() {
 
     if (authToken) {
       try {
-        // 1. Update profile details
         await updateAdminProfile(profileData, authToken)
         toast.success("Profile updated successfully")
     
-        // 2. Upload profile photo if selected
+     
         try {
           if (photoFile && adminId) {
             const photoForm = new FormData()
@@ -146,6 +146,7 @@ export function ProfileDialog() {
             toast.success("Profile photo updated successfully")
           }
         } catch (error) {
+          console.error(error)
           toast.error("Error updating profile ")
         }
     

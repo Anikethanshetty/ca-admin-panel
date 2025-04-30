@@ -41,14 +41,14 @@ export function useUsers() {
                 }, 10000) // 10 seconds
 
                 const apiUrl = `https://ca.http.vithsutra.com/admin/get/users/${decodedToken.id}`
-                
+
                 const response = await axios.get(apiUrl, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     },
                     signal: controller.signal // for aborting if needed
                 })
-
+                    
                 clearTimeout(timeoutId) // clear timeout if response returns
 
                 if (response.data.status === "success") {
@@ -56,8 +56,10 @@ export function useUsers() {
                 } else {
                     throw new Error(response.data.message || "Failed to fetch users")
                 }
-            } catch (err: any) {
+            } catch (err) {
+                // @ts-expect-error
                 if (err.name !== "CanceledError") {
+                // @ts-expect-error
                     setError(err.message || "An unexpected error occurred")
                 }
             } finally {

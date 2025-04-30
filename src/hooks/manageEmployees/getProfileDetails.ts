@@ -2,8 +2,6 @@
 import { useEffect, useState } from 'react'
 import useAuthToken from '../privateToken/authToken'
 import { jwtDecode } from 'jwt-decode'
-import Cookies from 'js-cookie'
-import { get } from 'http'
 
 interface AdminProfile {
   name: string

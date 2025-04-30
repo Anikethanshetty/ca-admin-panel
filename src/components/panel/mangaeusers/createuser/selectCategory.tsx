@@ -20,7 +20,7 @@ export function CategorySelect({ onSelect }: { onSelect: (category: { id: string
       if (selected) {
         const selectedData = { id: selected.category_id, name: selected.category_name }
         setSelectedCategory(selectedData)
-        onSelect(selectedData) // Pass as an object
+        onSelect(selectedData) 
       }
     }
   

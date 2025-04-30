@@ -4,21 +4,21 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { CreateCategory } from "../panel/mangaeusers/createcategory/category";
-import ProfileAvatar from "./Profile/profile";
 import { ProfileDialog } from "./Profile/profileDialog";
 
 const titles = [
-    // { path: "/status", w1: "Work", w2: "Status" },
     { path: "/viewuser", w1: "Team", w2: "Members" },
     { path: "/home", w1: "", w2: "" },
     { path: "/createuser", w1: "Create", w2: "Employee" },
     { path: "/history", w1: "Create", w2: "Manoj" },
-    { path: "/pendingleaves", w1: "Pending", w2: "Leaves" }
+    { path: "/pendingleaves", w1: "Pending", w2: "Leaves" },
+    { path: "/message", w1: "Chat With", w2: "Employees" }
 ];
 
 export function Navbar() {
     const [isNavOpen, setIsNavOpen] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [isDropdownOpenMessage, setIsDropdownOpenMessage] = useState(false);
     const [isAddEmployeesOpen, setIsAddEmployeesOpen] = useState(false);
     const pathname = usePathname();
     const navRef = useRef<HTMLDivElement>(null);
@@ -39,11 +39,13 @@ export function Navbar() {
 
     const handleNavToggle = () => setIsNavOpen(!isNavOpen);
     const handleDropdownToggle = () => setIsDropdownOpen(!isDropdownOpen);
+    const handleDropdownToggleMessage = () => setIsDropdownOpenMessage(!isDropdownOpenMessage);
     const handleAddEmployeesToggle = () => setIsAddEmployeesOpen(!isAddEmployeesOpen);
     const handleNavItemClick = () => {
         setIsNavOpen(false);
         setIsDropdownOpen(false);
         setIsAddEmployeesOpen(false);
+        setIsDropdownOpenMessage(false);
     };
 
     const isActive = (path: string) => pathname === path;
@@ -95,8 +97,22 @@ export function Navbar() {
                                 </div>
                             )}
                         </li>
-                        <li>
+                      { /* <li>
                             <Link href="/message" onClick={handleNavItemClick} className={`block py-2 px-3 rounded-sm ${isActive('/message') ? 'text-primary' : 'text-gray-900 hover:text-primary dark:text-white'}`}>Message</Link>
+                        </li> */}
+                        <li className="relative">
+                            <button onClick={handleDropdownToggleMessage} className={`flex items-center py-2 px-3 rounded-sm ${isDropdownOpenMessage ? 'text-primary' : 'text-gray-900 hover:text-primary dark:text-white'}`}>Message</button>
+                            {isDropdownOpenMessage && (
+                                <div className="absolute left-0 mt-2 w-30 bg-white rounded-lg shadow-lg dark:bg-gray-700">
+                                    <ul className="py-2 text-sm  dark:text-gray-200">
+                                      
+                                            <li><Link href="/message" onClick={handleNavItemClick} className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600"> User</Link></li>
+                                    </ul>
+                                    <div className="py-1">
+                                        <Link href="/message/group" onClick={handleNavItemClick} className="block px-4 py-2 text-sm hover:bg-gray-100 hover:rounded-md dark:hover:bg-gray-600"> Broadcast</Link>
+                                    </div>
+                                </div>
+                            )}
                         </li>
                         <li>
                            <div >

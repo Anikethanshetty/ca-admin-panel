@@ -18,6 +18,12 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
   if (pathname === "/forgotpassword") {
     return <>{children}</>;
   }
+  if (pathname === "/forgotpassword/otp") {
+    return <>{children}</>;
+  }
+  if (pathname === "/forgotpassword/newpassword") {
+    return <>{children}</>;
+  }
     return (
       <>
         <Navbar />

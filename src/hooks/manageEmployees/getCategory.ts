@@ -41,6 +41,7 @@ export function useEmployeeCategories() {
         } catch (error) {
             setError("Invalid authentication token. Please log in again.")
             setLoading(false)
+            console.error(error)
             return
         }
 

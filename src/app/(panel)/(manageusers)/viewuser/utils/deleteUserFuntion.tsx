@@ -1,25 +1,17 @@
+import useAuthToken from "@/hooks/privateToken/authToken"
 import { handelDeleteUser } from "@/lib/manageEmployee/deleteUser"
 import { useEffect, useState } from "react"
 
 export function handleDeleteUser({emplId}:{emplId:string}){
-    const [token, setToken] = useState<string | null>(null)
-
-    useEffect(() => {
-      const storedToken = localStorage.getItem("authToken")
-      if (!storedToken) {
-        alert("You are not authenticated")
-        return
-      }
-      setToken(storedToken)
-    }, [])
+   const {authToken} = useAuthToken()
   
    
-      if (!token) {
+      if (!authToken) {
         alert("You are not authenticated")
         return
       }
   
-      handelDeleteUser(emplId, token)
+      handelDeleteUser(emplId, authToken)
         .then(() => {
           alert("User deleted successfully")
           window.location.reload() 

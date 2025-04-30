@@ -7,23 +7,21 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuPortal,
   DropdownMenuSeparator,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { handelDeleteUser } from "@/lib/manageEmployee/deleteUser"
 import { Ellipsis } from "lucide-react"
 import Link from "next/link"
-import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import Cookies from "js-cookie"
+import { useGetFbEmpl } from "@/hooks/manageEmployees/getFbEmployees"
+import { toast } from "sonner"
+import { jwtDecode } from "jwt-decode"
 
 export function EmplMenu({ emplId }: { emplId: string}) {
   const [token, setToken] = useState<string | null>(null)
-
+  const [adminId,setAdminId] = useState()
 
   useEffect(() => {
     const storedToken = Cookies.get("token")
@@ -32,22 +30,43 @@ export function EmplMenu({ emplId }: { emplId: string}) {
       return
     }
     setToken(storedToken)
+    //@ts-expect-error
+    const decode = jwtDecode(storedToken)?.id
+    setAdminId(decode)
   }, [])
 
-  const handleDelete = () => {
+  const handleDelete = async() => {
     if (!token) {
       alert("You are not authenticated")
       return
     }
 
+    // const FbUser = fbUsers.find((user) =>{
+    //   if( user.empl_id === emplId) return emplId
+    // })
+
+    // if (!FbUser) {
+    //   toast("User not found")
+    //   return
+    // }
+
+
     handelDeleteUser(emplId, token)
-      .then(() => {
-        alert("User deleted successfully")
+      .then(async() => {
+        toast("User deleted successfully")
         window.location.reload() 
       })
       .catch((error) => {
-        alert("User not deleted: " + error.message)
+        toast("User not deleted: " + error.message)
       })
+
+  //   if(adminId){
+  //   const userDocRef = doc(db, "Admins",adminId , "AdminUsers", emplId)
+  //   await deleteDoc(userDocRef)
+  // }
+    toast("User deleted successfully")
+    window.location.reload()
+     
   }
 
   return (
@@ -79,25 +98,4 @@ export function EmplMenu({ emplId }: { emplId: string}) {
 
 
 
-{/* 
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem>Team</DropdownMenuItem>
-          <DropdownMenuSub>
-            <DropdownMenuSubTrigger>Invite Users</DropdownMenuSubTrigger>
-            <DropdownMenuPortal>
-              <DropdownMenuSubContent>
-                <DropdownMenuItem>Email</DropdownMenuItem>
-                <DropdownMenuItem>Message</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>More...</DropdownMenuItem>
-              </DropdownMenuSubContent>
-            </DropdownMenuPortal>
-          </DropdownMenuSub>
-        </DropdownMenuGroup> */}
 
-        {/* <DropdownMenuSeparator />
-        <DropdownMenuItem>GitHub</DropdownMenuItem>
-        <DropdownMenuItem>Support</DropdownMenuItem>
-        <DropdownMenuItem disabled>API</DropdownMenuItem>
-        <DropdownMenuSeparator /> */}

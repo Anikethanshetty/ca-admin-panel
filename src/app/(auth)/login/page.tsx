@@ -1,5 +1,4 @@
 import { LoginForm } from "@/components/authComponents/login/login-form"
-import Link from "next/link"
 
 export default function LoginPage() {
   return (
@@ -13,7 +12,7 @@ export default function LoginPage() {
       </div>
       <div className="relative hidden lg:flex justify-center items-center text-center text-xl font-semibold font-sans w-full h-full">
         <blockquote className="mt-6 border-l-2 pl-6 italic">
-          "Behind every successful business, there is an astute accountant."
+          Behind every successful business, there is an astute accountant.
         </blockquote>
       </div>
     </div>

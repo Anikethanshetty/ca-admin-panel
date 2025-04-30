@@ -38,7 +38,7 @@ export function CreateCategory() {
   }, [router])
 
   const handleSubmit = async () => {
-    let newErrors = { name: "", description: "" }
+    const newErrors = { name: "", description: "" }
 
     if (!name.trim()) newErrors.name = "Please enter a category name."
     if (!description.trim()) newErrors.description = "Please enter a description."

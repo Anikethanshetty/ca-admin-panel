@@ -16,6 +16,12 @@ import { handelCreateUser } from "@/lib/manageEmployee/createUser"
 import { CategorySelect } from "./selectCategory"
 import { toast } from "sonner"
 
+import { doc, setDoc} from "firebase/firestore"
+import { createUserWithEmailAndPassword } from "firebase/auth"
+import { auth, db } from "@/utils/firestore"
+import { jwtDecode } from "jwt-decode"
+
+
 export function EmplCreateForm({
   className,
   ...props
@@ -33,6 +39,7 @@ export function EmplCreateForm({
   const [error, setError] = useState("" )
   const [loading, setLoading] = useState(false)
   const [token, setToken] = useState<string | null>(null)
+  const [adminId, setAdminId] = useState<string | null>(null)
 
   useEffect(() => {
     const storedToken = Cookies.get("token")
@@ -41,7 +48,18 @@ export function EmplCreateForm({
       return
     }
     setToken(storedToken)
+ 
   }, [])
+
+  useEffect(() => {
+    if(token){
+      // @ts-expect-error
+      const adminId = jwtDecode(token).id
+      setAdminId(adminId)
+    }
+  }, [token])
+
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
@@ -68,10 +86,29 @@ export function EmplCreateForm({
 
     try {
       const response = await handelCreateUser(formData, token)
-
-
+      
       if (response && response.status) {
         toast("User registered successfully!")
+        if(adminId){
+          const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password)
+          const user = userCredential.user
+            const user_id = user.uid
+
+            const userData = {
+              email: formData.email,
+              name: formData.name,
+              user_id: user_id,
+              empl_id:response.data.user_id
+            }
+
+            const userDocRef = doc(db, "Admins", adminId, "AdminUsers", user_id)
+            await setDoc(userDocRef, userData)
+            toast("User registered successfully in FB!")
+        }
+        else{
+          toast("Admin not found!")
+        }
+        
         setFormData({
           name: "",
           dob: "",
@@ -152,3 +189,5 @@ export function EmplCreateForm({
     </div>
   )
 }
+
+

@@ -1,122 +1,36 @@
-"use client"
+import * as React from "react"
+import { cva, type VariantProps } from "class-variance-authority"
 
+import { cn } from "@/lib/utils"
 
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import {
-  Pagination,
-  PaginationContent,
+const badgeVariants = cva(
+  "inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+  {
+    variants: {
+      variant: {
+        default:
+          "border-transparent bg-primary text-primary-foreground shadow hover:bg-primary/80",
+        secondary:
+          "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        destructive:
+          "border-transparent bg-destructive text-destructive-foreground shadow hover:bg-destructive/80",
+        outline: "text-foreground",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  }
+)
 
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination"
-import { Badge } from "lucide-react"
-import { format } from "date-fns"
-import { MapPin } from "lucide-react"
-import { useState } from "react"
+export interface BadgeProps
+  extends React.HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof badgeVariants> {}
 
-interface WorkHistory {
-  work_date: string
-  login_time: string
-  logout_time: string
-  latitude: string
-  longitude: string
-  uploaded_work: string
-  timestamp: string
-}
-
-export function WorkHistoryTable({ workHistory }: { workHistory: WorkHistory[] }) {
-  const [page, setPage] = useState(1)
-  const itemsPerPage = 10
-  const totalPages = Math.ceil(workHistory.length / itemsPerPage)
-
-  const paginatedData = workHistory.slice(
-    (page - 1) * itemsPerPage,
-    page * itemsPerPage
-  )
-
-
-
-
-
+function Badge({ className, variant, ...props }: BadgeProps) {
   return (
-    <div className="space-y-4">
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            <TableRow >
-              <TableHead className="text-primary font-semibold">Date</TableHead>
-              <TableHead className="text-primary font-semibold">Login Time</TableHead>
-              <TableHead className="text-primary font-semibold">Logout Time</TableHead>
-              <TableHead className="text-primary font-semibold">Location</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {paginatedData.map((work, index) => (
-              <TableRow key={index}>
-                <TableCell className="font-medium">
-                  {format(new Date(work.work_date), "MMM dd, yyyy")}
-                </TableCell>
-                <TableCell>{work.login_time}</TableCell>
-                <TableCell>
-                  {work.logout_time === "pending" ? (
-                    <Badge variant="secondary">Active</Badge>
-                  ) : (
-                    work.logout_time
-                  )}
-                </TableCell>
-                <TableCell>
-                  <div className="flex items-center gap-2">
-                    <MapPin className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm text-muted-foreground">
-                      {work.latitude}, {work.longitude}
-                    </span>
-                  </div>
-                </TableCell>
-                {/* <TableCell>{getStatusBadge(work.uploaded_work)}</TableCell> */}
-                {/* <TableCell className="text-muted-foreground">
-                  {format(new Date(work.timestamp), "MMM dd, yyyy HH:mm")}
-                </TableCell> */}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
-
-      <Pagination className="justify-end">
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious 
-              onClick={() => setPage(p => Math.max(1, p - 1))}
-              className={page <= 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
-            />
-          </PaginationItem>
-          {[...Array(totalPages)].map((_, i) => (
-            <PaginationItem key={i + 1}>
-              <PaginationLink
-                onClick={() => setPage(i + 1)}
-                isActive={page === i + 1}
-              >
-                {i + 1}
-              </PaginationLink>
-            </PaginationItem>
-          ))}
-          <PaginationItem>
-            <PaginationNext
-              onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-              className={page >= totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
-            />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
-    </div>
+    <div className={cn(badgeVariants({ variant }), className)} {...props} />
   )
 }
+
+export { Badge, badgeVariants }

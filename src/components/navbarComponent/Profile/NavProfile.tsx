@@ -1,11 +1,10 @@
 // components/ProfileAvatar.tsx
 'use client'
 
-import { useRef, useState } from 'react'
 import Image from 'next/image'
 
 export default function NavProfileAvatar({children}:{children:React.ReactNode}) {
-  const [image, setImage] = useState<string | null>(null)
+  const image = null
   
 
   return (
