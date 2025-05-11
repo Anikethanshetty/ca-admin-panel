@@ -12,6 +12,7 @@ import { toast } from "sonner"
 import { storeFbId, storeToken } from "@/lib/cookie/storeCookie"
 import { signInWithEmailAndPassword } from "firebase/auth"
 import { auth } from "@/utils/firestore"
+import useAuthToken from "@/hooks/privateToken/authToken"
 
 export function LoginForm({
   className,
@@ -19,6 +20,7 @@ export function LoginForm({
 }: React.ComponentPropsWithoutRef<"form">) {
   const router = useRouter()
   const [disabled, setDisabled] = useState(false)
+  const {decodedToken} = useAuthToken()
 
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -30,15 +32,19 @@ export function LoginForm({
 
     try {
       const response = await handleLoginForm(email, password)
+     
 
       if (response.status === "success") {
         try {
-          const fbResponse = await signInWithEmailAndPassword(auth,email, password)
           const token = response.data.token
           storeToken(token)
+          const fbPassword = decodedToken?.firebasepassword
+          if(fbPassword){
+          const fbResponse = await signInWithEmailAndPassword(auth,email, fbPassword)     
           //@ts-expect-error
           storeFbId(fbResponse._tokenResponse.localId)
           router.push("/home")
+        }
         } catch (error) {
           toast("Login Failed")
         }

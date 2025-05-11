@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react"
 import {jwtDecode} from "jwt-decode"
-import { redirect } from "next/dist/server/api-utils"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import Cookies from "js-cookie"
@@ -10,6 +9,7 @@ interface DecodedToken {
   expiry: number
   id: string
   user_name: string
+  firebasepassword:string
 }
 
 export default function useAuthToken() {
